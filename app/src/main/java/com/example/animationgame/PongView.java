@@ -12,6 +12,7 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Build;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -222,6 +223,36 @@ public class PongView extends SurfaceView implements Runnable
 
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent motionEvent) {
+
+        switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
+
+            // Player has touched the screen
+            case MotionEvent.ACTION_DOWN:
+
+                mPaused = false;
+
+                // Is the touch on the right or left?
+                if(motionEvent.getX() > mScreenX / 2){
+                    mBar.setMovementState(mBar.RIGHT);
+                }
+                else{
+                    mBar.setMovementState(mBar.LEFT);
+                }
+
+                break;
+
+            // Player has removed finger from screen
+            case MotionEvent.ACTION_UP:
+
+                mBar.setMovementState(mBar.STOPPED);
+                break;
+        }
+        return true;
+    }
+
+
     public PongView(Context context, int x, int y) {
 
     /*
@@ -283,9 +314,6 @@ public class PongView extends SurfaceView implements Runnable
 
             descriptor = assetManager.openFd("loseLife.ogg");
             loseLifeID = sp.load(descriptor, 0);
-
-            descriptor = assetManager.openFd("explode.ogg");
-            explodeID = sp.load(descriptor, 0);
 
         }catch(IOException e){
             // Print an error message to the console
