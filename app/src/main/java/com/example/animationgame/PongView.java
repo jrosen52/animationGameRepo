@@ -17,6 +17,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import java.io.IOException;
+import java.util.Random;
 
 public class PongView extends SurfaceView implements Runnable
 {
@@ -45,6 +46,19 @@ public class PongView extends SurfaceView implements Runnable
     // The size of the screen in pixels
     int mScreenX;
     int mScreenY;
+
+    int green = Color.argb(255, 120, 197, 87);
+    int blue = Color.argb(255, 93, 142, 240);
+    int red = Color.argb(255, 240, 65, 93);
+    int yellow = Color.argb(255, 228, 235, 42);
+    int orange = Color.argb(255, 250, 193, 58);
+    int purple = Color.argb(255, 225, 58, 250);
+
+    int i = 0;
+
+    int colors[] = {Color.argb(255, 120, 197, 87),Color.argb(255, 93, 142, 240),
+            Color.argb(255, 240, 65, 93), Color.argb(255, 228, 235, 42),
+            Color.argb(255, 250, 193, 58), Color.argb(255, 225, 58, 250)};
 
     // The players Bar
     Bar mBar;
@@ -91,6 +105,7 @@ public class PongView extends SurfaceView implements Runnable
             mBall.clearObstacleY(mBar.getRect().top - 2);
 
             mScore++;
+            i = new Random().nextInt(6);
             mBall.increaseVelocity();
 
             sp.play(beep1ID, 1, 1, 0, 0, 1);
@@ -103,6 +118,7 @@ public class PongView extends SurfaceView implements Runnable
 
             // Lose a life
             mLives--;
+            i = new Random().nextInt(6);
             sp.play(loseLifeID, 1, 1, 0, 0, 1);
 
             if(mLives == 0){
@@ -115,7 +131,7 @@ public class PongView extends SurfaceView implements Runnable
         if(mBall.getRect().top < 0){
             mBall.reverseYVelocity();
             mBall.clearObstacleY(12);
-
+            i = new Random().nextInt(6);
             sp.play(beep2ID, 1, 1, 0, 0, 1);
         }
 
@@ -123,7 +139,7 @@ public class PongView extends SurfaceView implements Runnable
         if(mBall.getRect().left < 0){
             mBall.reverseXVelocity();
             mBall.clearObstacleX(2);
-
+            i = new Random().nextInt(6);
             sp.play(beep3ID, 1, 1, 0, 0, 1);
         }
 
@@ -131,7 +147,7 @@ public class PongView extends SurfaceView implements Runnable
         if(mBall.getRect().right > mScreenX){
             mBall.reverseXVelocity();
             mBall.clearObstacleX(mScreenX - 22);
-
+            i = new Random().nextInt(6);
             sp.play(beep3ID, 1, 1, 0, 0, 1);
         }
     }
@@ -148,7 +164,7 @@ public class PongView extends SurfaceView implements Runnable
             mCanvas = mOurHolder.lockCanvas();
 
             // Clear the screen with my favorite color
-            mCanvas.drawColor(Color.argb(255, 120, 197, 87));
+            mCanvas.drawColor(colors[i]);
 
             // Choose the brush color for drawing
             mPaint.setColor(Color.argb(255, 255, 255, 255));
