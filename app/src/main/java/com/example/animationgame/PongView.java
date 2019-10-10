@@ -66,6 +66,8 @@ public class PongView extends SurfaceView implements Runnable
     // A mBall
     Ball mBall;
 
+    Powerup extraBall;
+
     // For sound FX
     SoundPool sp;
     int beep1ID = -1;
@@ -182,6 +184,13 @@ public class PongView extends SurfaceView implements Runnable
             // Draw the mScore
             mPaint.setTextSize(40);
             mCanvas.drawText("Score: " + mScore + "   Lives: " + mLives, 10, 50, mPaint);
+
+            if(mScore == 8)
+            {
+                int x = new Random().nextInt(mScreenX + 20) + 20;
+                int y = new Random().nextInt(mScreenY);
+                extraBall = new Powerup(x, y);
+            }
 
             // Draw everything to the screen
             mOurHolder.unlockCanvasAndPost(mCanvas);

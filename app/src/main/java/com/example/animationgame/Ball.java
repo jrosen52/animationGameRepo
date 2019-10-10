@@ -64,8 +64,8 @@ public class Ball {
 // A score of over 20 is quite difficult
 // Reduce or increase 10 to make this easier or harder
     public void increaseVelocity(){
-        xVelocity = xVelocity + xVelocity / 10;
-        yVelocity = yVelocity + yVelocity / 10;
+        xVelocity = xVelocity + xVelocity / 20;
+        yVelocity = yVelocity + yVelocity / 20;
     }
 
     public void clearObstacleY(float y){

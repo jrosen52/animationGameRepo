@@ -51,7 +51,7 @@ public class Bar {
         // 1/25 screen mHeight high
         Height = screenY / 25;
 
-        // Start mBat in roughly the sceen centre
+        // Start mBat in roughly the screen centre
         xCoord = screenX / 2;
         yCoord = screenY - 20;
 
