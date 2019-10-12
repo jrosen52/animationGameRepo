@@ -47,6 +47,9 @@ public class PongView extends SurfaceView implements Runnable
     int mScreenX;
     int mScreenY;
 
+    int randX;
+    int randY;
+
     int green = Color.argb(255, 120, 197, 87);
     int blue = Color.argb(255, 93, 142, 240);
     int red = Color.argb(255, 240, 65, 93);
@@ -68,6 +71,10 @@ public class PongView extends SurfaceView implements Runnable
     Ball mBall2;
 
     boolean extraBallActive = false;
+    boolean gate1 = false;
+    boolean gate2 = false;
+    boolean gate3 = true;
+    boolean EB = false;
 
     Powerup extraBall;
 
@@ -103,6 +110,13 @@ public class PongView extends SurfaceView implements Runnable
         // Move the mBat if required
         mBar.update(mFPS);
         mBall.update(mFPS);
+
+        if(mScore == 3 && gate3 == false)
+        {
+            extraBall = new Powerup(randX, randY, mScreenX);
+            extraBallActive = true;
+            gate3 = true;
+        }
 
         if(RectF.intersects(mBar.getRect(), mBall.getRect())) {
             mBall.setRandomXVelocity();
@@ -156,17 +170,26 @@ public class PongView extends SurfaceView implements Runnable
             sp.play(beep3ID, 1, 1, 0, 0, 1);
         }
 
-        if(RectF.intersects(mBall.getRect(), extraBall.getRect()))
+        if(extraBallActive == true)
         {
-            mBall2 = new Ball(mScreenX, mScreenY);
-            extraBallActive = true;
+            if(RectF.intersects(mBall.getRect(), extraBall.getRect()))
+            {
+                if(gate2 == false)
+                {
+                    mBall2 = new Ball(mScreenX, mScreenY);
+                    gate2 = true;
+                }
+                extraBallActive = false;
+                EB = true;
+            }
         }
 
-        if(extraBallActive == true)
+        if(EB == true)
         {
             mBall2.update(mFPS);
         }
     }
+
 
     // Draw the newly updated scene
     public void draw() {
@@ -199,11 +222,15 @@ public class PongView extends SurfaceView implements Runnable
             mPaint.setTextSize(40);
             mCanvas.drawText("Score: " + mScore + "   Lives: " + mLives, 10, 50, mPaint);
 
-            if(mScore == 5)
+            if(extraBallActive == true)
             {
-                int x = new Random().nextInt(mScreenX + 20) + 20;
-                int y = new Random().nextInt(mScreenY);
-                extraBall = new Powerup(x, y, mScreenX);
+                if(gate1 == false)
+                {
+                    randX = new Random().nextInt(mScreenX + 20) + 20;
+                    randY = new Random().nextInt(mScreenY);
+                    gate1 = true;
+                }
+                extraBall = new Powerup(randX, randY, mScreenX);
                 mCanvas.drawRect(extraBall.getRect(), mPaint);
             }
 
