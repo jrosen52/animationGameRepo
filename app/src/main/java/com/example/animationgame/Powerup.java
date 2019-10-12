@@ -14,8 +14,14 @@ public class Powerup
         return Rect;
     }
 
-    public Powerup (int x, int y)
+    public Powerup (int x, int y, int screenX)
     {
+        Width = screenX / 50;
+        Height = Width;
         Rect = new RectF();
+        Rect.left = x;
+        Rect.top = y;
+        Rect.right = x + Width;
+        Rect.bottom = y - Height;
     }
 }

@@ -65,6 +65,9 @@ public class PongView extends SurfaceView implements Runnable
 
     // A mBall
     Ball mBall;
+    Ball mBall2;
+
+    boolean extraBallActive = false;
 
     Powerup extraBall;
 
@@ -152,6 +155,17 @@ public class PongView extends SurfaceView implements Runnable
             i = new Random().nextInt(6);
             sp.play(beep3ID, 1, 1, 0, 0, 1);
         }
+
+        if(RectF.intersects(mBall.getRect(), extraBall.getRect()))
+        {
+            mBall2 = new Ball(mScreenX, mScreenY);
+            extraBallActive = true;
+        }
+
+        if(extraBallActive == true)
+        {
+            mBall2.update(mFPS);
+        }
     }
 
     // Draw the newly updated scene
@@ -185,11 +199,12 @@ public class PongView extends SurfaceView implements Runnable
             mPaint.setTextSize(40);
             mCanvas.drawText("Score: " + mScore + "   Lives: " + mLives, 10, 50, mPaint);
 
-            if(mScore == 8)
+            if(mScore == 5)
             {
                 int x = new Random().nextInt(mScreenX + 20) + 20;
                 int y = new Random().nextInt(mScreenY);
-                extraBall = new Powerup(x, y);
+                extraBall = new Powerup(x, y, mScreenX);
+                mCanvas.drawRect(extraBall.getRect(), mPaint);
             }
 
             // Draw everything to the screen
