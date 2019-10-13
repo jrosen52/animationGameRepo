@@ -78,7 +78,12 @@ public class PongView extends SurfaceView implements Runnable
     boolean gate3 = false;
     boolean EB = false;
 
+    boolean extraLifeActive = false;
+    boolean gate4 = false;
+    boolean gate5 = false;
+
     Powerup extraBall;
+    Powerup extraLife;
 
     // For sound FX
     SoundPool sp;
@@ -120,6 +125,12 @@ public class PongView extends SurfaceView implements Runnable
             gate3 = true;
         }
 
+        if(mScore == 5 && gate5 == false)
+        {
+            extraLifeActive = true;
+            gate5 = true;
+        }
+
         if(RectF.intersects(mBar.getRect(), mBall.getRect())) {
             mBall.setRandomXVelocity();
             mBall.reverseYVelocity();
@@ -150,13 +161,6 @@ public class PongView extends SurfaceView implements Runnable
 
         // Bounce the mBall back when it hits the top of screen
         if(mBall.getRect().top < 0){
-            if(gate2 == false && extraBallActive == true)
-            {
-                mBall2 = new Ball(mScreenX, mScreenY);
-                EB = true;
-                gate2 = true;
-                extraBallActive = false;
-            }
             mBall.reverseYVelocity();
             mBall.clearObstacleY(12);
             i = new Random().nextInt(6);
@@ -181,16 +185,24 @@ public class PongView extends SurfaceView implements Runnable
 
         if(extraBallActive == true && gate1 == true)
         {
-            //mCanvas.drawText("Extra ball is active", 15, 50, mPaint);
             if(RectF.intersects(mBall.getRect(), extraBall.getRect()))
             {
                 if(gate2 == false)
                 {
                     mBall2 = new Ball(mScreenX, mScreenY);
+                    extraBallActive = false;
+                    EB = true;
                     gate2 = true;
                 }
-                extraBallActive = false;
-                EB = true;
+            }
+        }
+
+        if(extraLifeActive == true && gate4 == true)
+        {
+            if(RectF.intersects(extraLife.getRect(), mBall.getRect()))
+            {
+                mLives++;
+                extraLifeActive = false;
             }
         }
 
@@ -285,6 +297,19 @@ public class PongView extends SurfaceView implements Runnable
                 mCanvas.drawText("Extra ball is active", 10, 90, mPaint2);
                 mCanvas.drawRect(extraBall.getRect(), mPaint2);
                 gate1 = true;
+            }
+
+            if(extraLifeActive == true)
+            {
+                if(gate4 == false)
+                {
+                    randX = new Random().nextInt(mScreenX);
+                    randY = new Random().nextInt(mScreenY+ 50) + 50;
+                    extraLife = new Powerup(randX, randY, mScreenX);
+                }
+                mCanvas.drawText("Extra Life is active", 10, 120, mPaint);
+                mCanvas.drawRect(extraBall.getRect(), mPaint);
+                gate4 = true;
             }
 
             // Draw everything to the screen
