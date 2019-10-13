@@ -40,6 +40,7 @@ public class PongView extends SurfaceView implements Runnable
     // A Canvas and a Paint object
     Canvas mCanvas;
     Paint mPaint;
+    Paint mPaint2;
 
     // This variable tracks the game frame rate
     long mFPS;
@@ -149,6 +150,13 @@ public class PongView extends SurfaceView implements Runnable
 
         // Bounce the mBall back when it hits the top of screen
         if(mBall.getRect().top < 0){
+            if(gate2 == false && extraBallActive == true)
+            {
+                mBall2 = new Ball(mScreenX, mScreenY);
+                EB = true;
+                gate2 = true;
+                extraBallActive = false;
+            }
             mBall.reverseYVelocity();
             mBall.clearObstacleY(12);
             i = new Random().nextInt(6);
@@ -189,6 +197,42 @@ public class PongView extends SurfaceView implements Runnable
         if(EB == true)
         {
             mBall2.update(mFPS);
+
+            if(RectF.intersects(mBar.getRect(), mBall2.getRect())) {
+                mBall2.setRandomXVelocity();
+                mBall2.reverseYVelocity();
+                mBall2.clearObstacleY(mBar.getRect().top - 2);
+
+                mScore++;
+                mBall2.increaseVelocity();
+
+                sp.play(beep1ID, 1, 1, 0, 0, 1);
+            }
+
+            if(mBall2.getRect().top < 0){
+                mBall2.reverseYVelocity();
+                mBall2.clearObstacleY(12);
+                sp.play(beep2ID, 1, 1, 0, 0, 1);
+            }
+
+            // If the mBall hits left wall bounce
+            if(mBall2.getRect().left < 0){
+                mBall2.reverseXVelocity();
+                mBall2.clearObstacleX(2);
+                sp.play(beep3ID, 1, 1, 0, 0, 1);
+            }
+
+            // If the mBall hits right wall bounce
+            if(mBall2.getRect().right > mScreenX){
+                mBall2.reverseXVelocity();
+                mBall2.clearObstacleX(mScreenX - 22);
+                sp.play(beep3ID, 1, 1, 0, 0, 1);
+            }
+
+            if(mBall.getRect().bottom > mScreenY){
+                EB = false;
+            }
+
         }
     }
 
@@ -209,12 +253,18 @@ public class PongView extends SurfaceView implements Runnable
 
             // Choose the brush color for drawing
             mPaint.setColor(Color.argb(255, 255, 255, 255));
+            mPaint2.setColor(Color.argb(255, 0, 0, 0));
 
             // Draw the mBat
             mCanvas.drawRect(mBar.getRect(), mPaint);
 
             // Draw the mBall
             mCanvas.drawRect(mBall.getRect(), mPaint);
+
+            if(EB == true)
+            {
+                mCanvas.drawRect(mBall2.getRect(), mPaint2);
+            }
 
 
             // Change the drawing color to white
@@ -232,8 +282,8 @@ public class PongView extends SurfaceView implements Runnable
                     randY = new Random().nextInt(mScreenY+ 50) + 50;
                     extraBall = new Powerup(randX, randY, mScreenX);
                 }
-                mCanvas.drawText("Extra ball is active", 10, 90, mPaint);
-                mCanvas.drawRect(extraBall.getRect(), mPaint);
+                mCanvas.drawText("Extra ball is active", 10, 90, mPaint2);
+                mCanvas.drawRect(extraBall.getRect(), mPaint2);
                 gate1 = true;
             }
 
@@ -338,6 +388,7 @@ public class PongView extends SurfaceView implements Runnable
         // Initialize mOurHolder and mPaint objects
         mOurHolder = getHolder();
         mPaint = new Paint();
+        mPaint2 = new Paint();
 
         // A new mBat
         mBar = new Bar(mScreenX, mScreenY);
