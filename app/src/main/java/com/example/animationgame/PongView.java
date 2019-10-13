@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.Random;
@@ -73,7 +74,7 @@ public class PongView extends SurfaceView implements Runnable
     boolean extraBallActive = false;
     boolean gate1 = false;
     boolean gate2 = false;
-    boolean gate3 = true;
+    boolean gate3 = false;
     boolean EB = false;
 
     Powerup extraBall;
@@ -113,7 +114,7 @@ public class PongView extends SurfaceView implements Runnable
 
         if(mScore == 3 && gate3 == false)
         {
-            extraBall = new Powerup(randX, randY, mScreenX);
+            //extraBall = new Powerup(randX, randY, mScreenX);
             extraBallActive = true;
             gate3 = true;
         }
@@ -170,8 +171,9 @@ public class PongView extends SurfaceView implements Runnable
             sp.play(beep3ID, 1, 1, 0, 0, 1);
         }
 
-        if(extraBallActive == true)
+        if(extraBallActive == true && gate1 == true)
         {
+            //mCanvas.drawText("Extra ball is active", 15, 50, mPaint);
             if(RectF.intersects(mBall.getRect(), extraBall.getRect()))
             {
                 if(gate2 == false)
@@ -226,12 +228,13 @@ public class PongView extends SurfaceView implements Runnable
             {
                 if(gate1 == false)
                 {
-                    randX = new Random().nextInt(mScreenX + 20) + 20;
-                    randY = new Random().nextInt(mScreenY);
-                    gate1 = true;
+                    randX = new Random().nextInt(mScreenX);
+                    randY = new Random().nextInt(mScreenY+ 50) + 50;
+                    extraBall = new Powerup(randX, randY, mScreenX);
                 }
-                extraBall = new Powerup(randX, randY, mScreenX);
+                mCanvas.drawText("Extra ball is active", 10, 90, mPaint);
                 mCanvas.drawRect(extraBall.getRect(), mPaint);
+                gate1 = true;
             }
 
             // Draw everything to the screen

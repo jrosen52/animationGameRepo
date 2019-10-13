@@ -16,7 +16,7 @@ public class Powerup
 
     public Powerup (int x, int y, int screenX)
     {
-        Width = screenX / 50;
+        Width = screenX / 10;
         Height = Width;
         Rect = new RectF();
         Rect.left = x;
