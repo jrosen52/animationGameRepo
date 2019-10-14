@@ -1,6 +1,5 @@
 package com.example.animationgame;
 
-import android.content.res.Resources;
 import android.graphics.RectF;
 
 public class Powerup
@@ -16,12 +15,8 @@ public class Powerup
 
     public Powerup (int x, int y, int screenX)
     {
-        Width = screenX / 10;
+        Width = screenX / 15;
         Height = Width;
-        Rect = new RectF();
-        Rect.left = x;
-        Rect.top = y;
-        Rect.right = x + Width;
-        Rect.bottom = y - Height;
+        Rect = new RectF(x, y, x + Width, y - Height);
     }
 }

@@ -16,18 +16,12 @@ public class Ball {
 
     public Ball(int screenX, int screenY){
 
-        // Make the mBall size relative to the screen resolution
         Width = screenX / 100;
         Height = Width;
 
-    /*
-        Start the ball travelling straight up
-        at a quarter of the screen height per second
-    */
         yVelocity = screenY / 4;
         xVelocity = yVelocity;
 
-        // Initialize the Rect that represents the mBall
         Rect = new RectF();
 
     }
@@ -39,19 +33,16 @@ public class Ball {
         Rect.bottom = Rect.top - Height;
     }
 
-    // Reverse the vertical heading
     public void reverseYVelocity(){
         yVelocity = -yVelocity;
     }
 
-    // Reverse the horizontal heading
     public void reverseXVelocity(){
         xVelocity = -xVelocity;
     }
 
     public void setRandomXVelocity(){
 
-        // Generate a random number either 0 or 1
         Random generator = new Random();
         int answer = generator.nextInt(2);
 
@@ -60,9 +51,6 @@ public class Ball {
         }
     }
 
-    // Speed up by 10%
-// A score of over 20 is quite difficult
-// Reduce or increase 10 to make this easier or harder
     public void increaseVelocity(){
         xVelocity = xVelocity + xVelocity / 20;
         yVelocity = yVelocity + yVelocity / 20;
